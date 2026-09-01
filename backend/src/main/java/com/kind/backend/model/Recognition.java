@@ -16,16 +16,16 @@ public class Recognition {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "quality_id", nullable = false)
+    private Quality quality;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "giver_id", nullable = false)
     private User giver;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "quality_id", nullable = false)
+    @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "quality_id", nullable = false)
-    private Quality quality;
 
     @Column(nullable = false, length = 1000)
     private String message;
