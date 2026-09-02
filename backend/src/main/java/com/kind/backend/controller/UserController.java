@@ -27,12 +27,14 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserResponse getById(@PathVariable Long id){
+
         return userService.getById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse create(@Valid @RequestBody CreateUserRequest request){
+
         return userService.create(request);
     }
 
