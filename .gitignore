@@ -13,6 +13,7 @@ postgres_data/
 backend/target/
 backend/.mvn/wrapper/maven-wrapper.jar
 backend/HELP.md
+backend/docs/javadoc/
 
 frontend/node_modules/
 frontend/dist/

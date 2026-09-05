@@ -18,10 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Реализация {@link RecognitionService}
+ */
 @Service
 @RequiredArgsConstructor
 public class RecognitionServiceImpl implements RecognitionService {
 
+    /**
+     * Дневной лимит баллов на раздачу одному юзеру
+     */
     private static final int daily_limit = 50; //пока константа
 
     private final QualityRepository qualityRepository;
@@ -44,6 +50,14 @@ public class RecognitionServiceImpl implements RecognitionService {
         return toResponse(recognition);
     }
 
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Доп: при отсутствии баланса создает его с {@link #daily_limit};
+     *     в новый день лимит сбрасывается.
+     * </p>
+     */
     @Override
     @Transactional
     public RecognitionResponse create(CreateRecognitionRequest request){
@@ -97,6 +111,9 @@ public class RecognitionServiceImpl implements RecognitionService {
         recognitionRepository.delete(recognition);
     }
 
+    /**
+     * Баланс пользователя или новый с дневным лимитом, если записи ещё нет.
+     */
     private UserBalance getOrCreateBalance(User user){
         return userBalanceRepository.findByUserId(user.getId())
                 .orElseGet(() -> {
@@ -108,6 +125,9 @@ public class RecognitionServiceImpl implements RecognitionService {
                 });
     }
 
+    /**
+     * Сброс giveable-баллов, если последний reset был не сегодня.
+     */
     private void resetIfNewDay(UserBalance balance){
         if(balance.getLastResetDate() == null || balance.getLastResetDate().isBefore(LocalDate.now())){
             balance.setGiveablePoints(daily_limit);
@@ -115,6 +135,9 @@ public class RecognitionServiceImpl implements RecognitionService {
         }
     }
 
+    /**
+     * DTO для ответа API.
+     */
     private RecognitionResponse toResponse(Recognition recognition){
         RecognitionResponse dto = new RecognitionResponse();
         dto.setId(recognition.getId());
