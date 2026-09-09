@@ -6,6 +6,9 @@ import com.kind.backend.dto.response.UserResponse;
 
 import java.util.List;
 
+/**
+ * Сервис юзера: создание, удаление, обновление.
+ */
 public interface UserService {
     List<UserResponse> getAll();
     UserResponse getById(Long id);

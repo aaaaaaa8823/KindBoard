@@ -5,6 +5,7 @@ import com.kind.backend.dto.request.UpdateUserRequest;
 import com.kind.backend.dto.response.UserResponse;
 import com.kind.backend.model.User;
 import com.kind.backend.repository.UserRepository;
+import com.kind.backend.service.RecognitionService;
 import com.kind.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Реализация {@link UserService}
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {

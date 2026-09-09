@@ -6,12 +6,16 @@ import com.kind.backend.dto.response.QualityResponse;
 import com.kind.backend.repository.QualityRepository;
 import com.kind.backend.service.QualityService;
 import com.kind.backend.model.Quality;
+import com.kind.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Реализация {@link QualityService}
+ */
 @Service
 @RequiredArgsConstructor
 public class QualityServiceImpl implements QualityService {

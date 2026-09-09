@@ -6,6 +6,9 @@ import com.kind.backend.dto.response.QualityResponse;
 
 import java.util.List;
 
+/**
+ * Сервис для качеств: создание, удаление, обновление.
+ */
 public interface QualityService {
     List<QualityResponse> getAll();
     QualityResponse getById(Long id);
