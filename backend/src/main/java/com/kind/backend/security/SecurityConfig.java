@@ -18,7 +18,6 @@ import org.springframework.security.config.annotation.authentication.configurati
  * <p>
  * Отключает CSRF и серверные сессии, открывает {@code /api/auth/**}
  * без токена, остальные запросы требует аутентификации.
- * Подключает {@link JwtAuthenticationFilter} и BCrypt для паролей.
  */
 @Configuration
 @EnableWebSecurity
