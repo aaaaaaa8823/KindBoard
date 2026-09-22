@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { AuthMode } from "../types/auth";
 import { login, register } from "../api/auth";
 import "./css/AuthPage.css";
@@ -10,6 +11,7 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const isSignIn = mode === "signin";
 
@@ -31,11 +33,10 @@ export default function AuthPage() {
         role: data.role,
       }));
 
-      // позже: navigate to Home
       console.log("Auth ok", data);
-      alert("Success! Token saved.");
+      navigate("/home");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(toUserMessage(err, mode));
     } finally {
       setLoading(false);
     }
@@ -109,4 +110,25 @@ export default function AuthPage() {
       </form>
     </div>
   );
+}
+
+function toUserMessage(err: unknown, mode: "signin" | "signup"): string {
+  const raw = err instanceof Error ? err.message : "";
+
+  if (raw.includes("Invalid email or password")) {
+    return "Неверный email или пароль";
+  }
+  if (raw.includes("Email already in use")) {
+    return "Этот email уже зарегистрирован";
+  }
+  if (raw.includes("Username already in use")) {
+    return "Это имя уже занято";
+  }
+  if (raw.includes("Failed to fetch") || raw.includes("NetworkError")) {
+    return "Нет связи с сервером. Проверь, что бэкенд запущен.";
+  }
+
+  return mode === "signin"
+    ? "Не удалось войти. Проверь данные."
+    : "Не удалось зарегистрироваться.";
 }

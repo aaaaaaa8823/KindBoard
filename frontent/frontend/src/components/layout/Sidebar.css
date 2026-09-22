@@ -1,0 +1,21 @@
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: #fff;
+  border-right: 1px solid #e1e1e1;
+  padding: 24px 16px;
+}
+
+.nav-item {
+  display: block;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  color: #888;
+  text-decoration: none;
+}
+
+.nav-item.active {
+  color: #249d8f;
+  border: 1px solid #249d8f;
+}
