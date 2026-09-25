@@ -19,3 +19,11 @@
   color: #249d8f;
   border: 1px solid #249d8f;
 }
+
+.sidebar-logo{
+  padding: 0.4rem;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 18px;
+  color: #249d8f;
+}

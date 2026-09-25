@@ -1,0 +1,59 @@
+.navbar {
+  height: 76px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #e1e1e1;
+  margin-left: auto;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-title {
+  font-weight: 600;
+  color: #249d8f;
+  font-size: 1.05rem;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: left;
+  gap: 12px;
+}
+
+.navbar-user-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.25;
+}
+
+.navbar-username {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+}
+
+.navbar-email {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.navbar-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff6e3;
+  border: 2px solid #249d8f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #249d8f;
+}
