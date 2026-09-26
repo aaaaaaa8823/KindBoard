@@ -12,7 +12,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> handleRuntime(RuntimeException ex){
         String msq = ex.getMessage() != null ? ex.getMessage() : "Error";
-
+    
         HttpStatus status = HttpStatus.BAD_REQUEST;
         if(msq.toLowerCase().contains("invalid email or password")){
             status = HttpStatus.UNAUTHORIZED;

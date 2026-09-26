@@ -3,6 +3,8 @@ package com.kind.backend.service.impl;
 import com.kind.backend.dto.request.LoginRequest;
 import com.kind.backend.dto.request.RegisterRequest;
 import com.kind.backend.dto.response.AuthResponse;
+import com.kind.backend.model.UserBalance;
+import com.kind.backend.repository.UserBalanceRepository;
 import com.kind.backend.repository.UserRepository;
 import com.kind.backend.security.JwtService;
 import com.kind.backend.service.AuthService;
@@ -12,12 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserBalanceRepository userBalanceRepository;
 
     @Override
     @Transactional
@@ -38,8 +43,14 @@ public class AuthServiceImpl implements AuthService {
         user.setActive(true);
 
         User saved = userRepository.save(user);
-        String token = jwtService.generateToken(saved.getEmail());
 
+        UserBalance balance = new UserBalance();
+        balance.setUser(saved);
+        balance.setGiveablePoints(50);
+        balance.setLastResetDate(LocalDate.now());
+        userBalanceRepository.save(balance);
+
+        String token = jwtService.generateToken(saved.getEmail());
         return toAuthResponse(saved, token);
     }
 
