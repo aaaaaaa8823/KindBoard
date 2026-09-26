@@ -4,6 +4,8 @@ import ColleaguesCard from "../components/home/ColleaguesCard";
 import { fetchUsers, type UserDto } from "../api/users";
 import { fetchMyBalance } from "../api/balance";
 import "./css/HomePage.css";
+import RecognizeModal from "../components/home/RecognizeModal";
+import { createRecognition } from "../api/recognition";
 
 function getCurrentUserId(): number | null {
   try {
@@ -50,15 +52,31 @@ export default function HomePage() {
       </aside>
 
       {modalOpen && selected && (
-        <div className="modal-backdrop" onClick={() => setModalOpen(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>To {selected.username}</h2>
-            <p>модалке css сделать</p>
-            <button type="button" onClick={() => setModalOpen(false)}>
-              Close
-            </button>
-          </div>
-        </div>
+        <RecognizeModal
+          colleagues={colleagues}
+    initialReceiver={selected}
+    giveablePoints={giveable}
+    onClose={() => setModalOpen(false)}
+    onSubmit={async (data) => {
+      const raw = localStorage.getItem("user");
+      const me = raw ? JSON.parse(raw) as { id: number } : null;
+      if (!me?.id) {
+        throw new Error("Not logged in");
+      }
+
+      await createRecognition({
+        giverId: me.id,
+        receiverId: data.receiverId,
+        qualityId: data.qualityId,
+        message: data.message,
+        points: data.points,
+      });
+
+      const b = await fetchMyBalance();
+      setGiveable(b.giveablePoints);
+      setModalOpen(false); 
+      }}
+        />
       )}
 
       {error && <p className="home-error">{error}</p>}
