@@ -1,0 +1,49 @@
+.stats-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 16px 18px;
+  text-align: center;
+}
+
+.stats-daily {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  color: #9a9a9a;
+  font-weight: 400;
+}
+
+.stats-daily strong {
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.stats-divider {
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  margin: 0 8px 14px;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+}
+
+.stats-block {
+  text-align: center;
+  min-width: 72px;
+}
+
+.stats-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
+}
+
+.stats-label {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: #a0a0a0;
+  font-weight: 400;
+}

@@ -1,0 +1,17 @@
+.home-page {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.home-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.home-aside {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
