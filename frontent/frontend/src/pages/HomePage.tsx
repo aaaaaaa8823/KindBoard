@@ -5,7 +5,12 @@ import { fetchUsers, type UserDto } from "../api/users";
 import { fetchMyBalance } from "../api/balance";
 import "./css/HomePage.css";
 import RecognizeModal from "../components/home/RecognizeModal";
-import { createRecognition } from "../api/recognition";
+import FeedPost from "../components/home/FeedPost";
+import {
+  createRecognition,
+  fetchRecognition,
+  type RecognitionDto,
+} from "../api/recognition";
 
 function getCurrentUserId(): number | null {
   try {
@@ -23,16 +28,22 @@ export default function HomePage() {
   const [selected, setSelected] = useState<UserDto | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [posts, setPosts] = useState<RecognitionDto[]>([]);
 
   useEffect(() => {
     const me = getCurrentUserId();
 
-    Promise.all([fetchMyBalance(), fetchUsers()])
-      .then(([balance, users]) => {
-        setGiveable(balance.giveablePoints);
-        setColleagues(users.filter((u) => u.id !== me));
-      })
-      .catch((e) => setError(e instanceof Error ? e.message : "Failed to load"));
+  Promise.all([fetchMyBalance(), fetchUsers(), fetchRecognition()])
+    .then(([balance, users, recognitions]) => {
+      setGiveable(balance.giveablePoints);
+      setColleagues(users.filter((u) => u.id !== me));
+
+      const sorted = [...recognitions].sort(
+        (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
+      );
+      setPosts(sorted);
+    })
+    .catch((e) => setError(e instanceof Error ? e.message : "Failed to load"));
   }, []);
 
   function handleRecognize(user: UserDto) {
@@ -43,7 +54,10 @@ export default function HomePage() {
   return (
     <div className="home-page">
       <div className="home-main">
-        <p className="home-placeholder">скоро посты</p>
+       {posts.length === 0 ? (
+    <p className="home-placeholder">No recognitions yet</p>):(
+      posts.map((post) => <FeedPost key={post.id} post={post} />)
+  )}
       </div>
 
       <aside className="home-aside">
@@ -72,9 +86,18 @@ export default function HomePage() {
         points: data.points,
       });
 
-      const b = await fetchMyBalance();
-      setGiveable(b.giveablePoints);
-      setModalOpen(false); 
+      const [b, recognitions] = await Promise.all([
+    fetchMyBalance(),
+    fetchRecognition(),
+  ]);
+
+  setGiveable(b.giveablePoints);
+
+  setPosts(
+    [...recognitions].sort(
+      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
+    )
+  );
       }}
         />
       )}

@@ -3,8 +3,6 @@ import type { UserDto } from "../../api/users";
 
 import "./RecognizeModal.css";
 
-import { data } from "react-router-dom";
-
 type Quality = {
     id: number; 
     name: string;
