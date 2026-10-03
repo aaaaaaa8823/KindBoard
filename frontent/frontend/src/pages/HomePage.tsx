@@ -12,6 +12,8 @@ import {
   type RecognitionDto,
 } from "../api/recognition";
 
+import{useMemo} from "react";
+
 function getCurrentUserId(): number | null {
   try {
     const raw = localStorage.getItem("user");
@@ -29,6 +31,8 @@ export default function HomePage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [posts, setPosts] = useState<RecognitionDto[]>([]);
+  const [composerText, setComposerText] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
     const me = getCurrentUserId();
@@ -51,9 +55,62 @@ export default function HomePage() {
     setModalOpen(true);
   }
 
+function openModalFromComposer() {
+  setModalMessage(composerText.trim());
+  setSelected(colleagues[0] ?? null);
+  setModalOpen(true);
+}
+
+function handleCloseModal() {
+  setModalOpen(false);
+  setModalMessage("");
+  setSelected(null);
+}
+
+type StoreUser = {
+    id: number;
+    username: string;
+};
+
+function getStoreUser(): StoreUser | null {
+    const raw = localStorage.getItem("user");
+    if(!raw) return null;
+    try{
+        return JSON.parse(raw) as StoreUser;
+    } catch {
+        return null;
+    }
+}
+
+const user = useMemo(() => getStoreUser(), []);
+
+    const name = user?.username ?? "user";
+    const initial = name.charAt(0).toUpperCase();
+
   return (
     <div className="home-page">
       <div className="home-main">
+
+        <section className="composer-card">
+        <h3 className="composer-title">Post recognition</h3>
+        <div className="composer-row">
+          <div className="composer-avatar">{initial}</div>
+          <input
+            className="composer-input"
+            type="text"
+            placeholder="Make a recognition to…"
+            value={composerText}
+            onChange={(e) => setComposerText(e.target.value)}
+          />
+        </div>
+        {composerText.trim() && (
+          <div className="composer-actions">
+            <button type="button" className="btn-choose" onClick={openModalFromComposer}>
+              Choose colleague
+            </button>
+          </div>
+        )}
+      </section>
        {posts.length === 0 ? (
     <p className="home-placeholder">No recognitions yet</p>):(
       posts.map((post) => <FeedPost key={post.id} post={post} />)
@@ -70,7 +127,9 @@ export default function HomePage() {
           colleagues={colleagues}
     initialReceiver={selected}
     giveablePoints={giveable}
-    onClose={() => setModalOpen(false)}
+    initialMessage={modalMessage}
+    onClose={handleCloseModal}
+    
     onSubmit={async (data) => {
       const raw = localStorage.getItem("user");
       const me = raw ? JSON.parse(raw) as { id: number } : null;
@@ -92,6 +151,8 @@ export default function HomePage() {
   ]);
 
   setGiveable(b.giveablePoints);
+  setComposerText("");
+  setModalMessage("");
 
   setPosts(
     [...recognitions].sort(

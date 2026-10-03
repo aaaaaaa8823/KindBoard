@@ -1,8 +1,9 @@
 .feed-post {
   background: #fff;
-  border-radius: 16px;
+  border-radius: 5px;
   padding: 18px 20px;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(118, 118, 118, 0.2);
 }
 
 .feed-post-header {
@@ -36,9 +37,10 @@
 }
 
 .feed-post-message {
-  margin: 0 0 14px;
+
+  margin: 10px 55px 16px;
   font-size: 0.95rem;
-  line-height: 1.45;
+  /* line-height: 1.45; */
   color: #1a1a1a;
 }
 
@@ -49,6 +51,7 @@
   flex-wrap: wrap;
   border-top: 1px solid #f0f0f0;
   padding-top: 12px;
+  margin: 0 55px 0;
 }
 
 .feed-post-pair {

@@ -20,6 +20,7 @@ type Props = {
     message: string;
     points: number;
   }) => Promise<void>;
+  initialMessage?: string;
 }
 
 export default function RecognizeModal({
@@ -28,27 +29,29 @@ export default function RecognizeModal({
     giveablePoints,
     onClose,
     onSubmit,
+    initialMessage,
 }:Props){
     const[receiver, setReceiver] = useState(initialReceiver);
     const [points, setPoints] = useState(10);
-    const [message, setMessage] = useState("");
+    const [message, setMessage] = useState(initialMessage ?? "");
     const [qualities, setQualities] = useState<Quality[]>([]);
     const [qualityId, setQualityId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+      setMessage(initialMessage ?? "");
+
         fetch("http://localhost:8080/api/qualities", {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
-
         .then((r) => r.json())
         .then((data: Quality[]) => {
             setQualities(data);
             if (data[0]) setQualityId(data[0].id);
         })
         .catch(() => setError("Failed to load qualities"));
-    }, []);
+    }, [initialMessage, initialReceiver]);
 
     const leftToday = giveablePoints;
 

@@ -1,7 +1,8 @@
 .colleagues-card {
   background: #fff;
-  border-radius: 16px;
+  border-radius: 5px;
   padding: 16px 14px;
+  box-shadow: 0 2px 5px rgba(118, 118, 118, 0.2);
 }
 
 .colleagues-card h2 {
@@ -71,7 +72,7 @@
   background: #249d8f;
   color: #fff;
   border: none;
-  border-radius: 999px;
+  border-radius: 5px;
   padding: 6px 12px;
   font-size: 0.75rem;
   font-weight: 600;

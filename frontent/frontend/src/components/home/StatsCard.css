@@ -1,8 +1,9 @@
 .stats-card {
   background: #fff;
-  border-radius: 16px;
+  border-radius: 5px;
   padding: 20px 16px 18px;
   text-align: center;
+  box-shadow: 0 2px 5px rgba(118, 118, 118, 0.2);
 }
 
 .stats-daily {
