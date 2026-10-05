@@ -11,4 +11,5 @@ import java.time.LocalDate;
 public class BalanceResponce {
     private Integer giveablePoints;
     private LocalDate lastResetDate;
+    private Integer receivedThisMonth;
 }

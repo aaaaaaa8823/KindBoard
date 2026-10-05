@@ -3,6 +3,7 @@ package com.kind.backend.service.impl;
 import com.kind.backend.dto.response.BalanceResponce;
 import com.kind.backend.model.User;
 import com.kind.backend.model.UserBalance;
+import com.kind.backend.repository.RecognitionRepository;
 import com.kind.backend.repository.UserBalanceRepository;
 import com.kind.backend.repository.UserRepository;
 import com.kind.backend.service.BalanceSerive;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,11 @@ public class BalanceServiceImpl implements BalanceSerive {
 
     private final UserRepository userRepository;
     private final UserBalanceRepository userBalanceRepository;
+    private final RecognitionRepository recognitionRepository;
+
+    LocalDate today = LocalDate.now();
+    LocalDateTime from = today.withDayOfMonth(1).atStartOfDay();
+    LocalDateTime to = today.plusMonths(1).withDayOfMonth(1).atStartOfDay();
 
     @Override
     @Transactional
@@ -32,6 +39,13 @@ public class BalanceServiceImpl implements BalanceSerive {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        Integer received = recognitionRepository.sumPointsReceivedBetween(
+                user.getId(), from, to
+        );
+        if (received == null) {
+            received = 0;
+        }
+
         UserBalance balance = userBalanceRepository.findByUserId(user.getId())
                 .orElseGet(() -> createBalance(user));
 
@@ -40,7 +54,8 @@ public class BalanceServiceImpl implements BalanceSerive {
 
         return new BalanceResponce(
                 balance.getGiveablePoints(),
-                balance.getLastResetDate()
+                balance.getLastResetDate(),
+                received
         );
     }
 
