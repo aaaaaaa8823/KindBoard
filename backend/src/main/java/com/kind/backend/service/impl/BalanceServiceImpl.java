@@ -7,6 +7,7 @@ import com.kind.backend.repository.RecognitionRepository;
 import com.kind.backend.repository.UserBalanceRepository;
 import com.kind.backend.repository.UserRepository;
 import com.kind.backend.service.BalanceSerive;
+import com.kind.backend.service.RankingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class BalanceServiceImpl implements BalanceSerive {
     private final UserRepository userRepository;
     private final UserBalanceRepository userBalanceRepository;
     private final RecognitionRepository recognitionRepository;
+    private final RankingService rankingService;
 
     LocalDate today = LocalDate.now();
     LocalDateTime from = today.withDayOfMonth(1).atStartOfDay();
@@ -52,10 +54,13 @@ public class BalanceServiceImpl implements BalanceSerive {
         resetIfNewDay(balance);
         userBalanceRepository.save(balance);
 
+        Integer ranking = rankingService.getMyRank();
+
         return new BalanceResponce(
                 balance.getGiveablePoints(),
                 balance.getLastResetDate(),
-                received
+                received,
+                ranking
         );
     }
 

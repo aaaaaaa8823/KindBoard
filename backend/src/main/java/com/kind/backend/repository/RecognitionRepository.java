@@ -1,5 +1,6 @@
 package com.kind.backend.repository;
 
+import com.kind.backend.dto.response.ReceiverStatsProjection;
 import com.kind.backend.model.Recognition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +21,22 @@ public interface RecognitionRepository extends JpaRepository<Recognition, Long> 
 """)
     Integer sumPointsReceivedBetween(
             @Param("userId") Long userId,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to
+    );
+
+    @Query("""
+    select r.receiver.id as receiverId,
+    count(DISTINCT r.giver.id) as uniqueGivers,
+    coalesce(sum(r.points), 0) as pointsSum
+    from Recognition r
+    where r.status = 'active'
+    and r.createdAt >= :from
+    and r.createdAt < :to
+    group by r.receiver.id
+    order by count(distinct r.giver.id) desc, sum(r.points) desc 
+""")
+    List<ReceiverStatsProjection> findMouthlyReceiverStats(
             @Param("from") LocalDateTime from,
             @Param("to") LocalDateTime to
     );
