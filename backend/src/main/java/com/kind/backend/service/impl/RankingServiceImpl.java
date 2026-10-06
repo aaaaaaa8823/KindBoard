@@ -1,8 +1,12 @@
 package com.kind.backend.service.impl;
 
+import com.kind.backend.dto.response.CategoryRankingEntryResponse;
+import com.kind.backend.dto.response.QualityStatsProjection;
 import com.kind.backend.dto.response.RankingEntryResponse;
 import com.kind.backend.dto.response.ReceiverStatsProjection;
+import com.kind.backend.model.Quality;
 import com.kind.backend.model.User;
+import com.kind.backend.repository.QualityRepository;
 import com.kind.backend.repository.RecognitionRepository;
 import com.kind.backend.repository.UserRepository;
 import com.kind.backend.service.RankingService;
@@ -22,6 +26,7 @@ public class RankingServiceImpl implements RankingService {
 
     private final RecognitionRepository recognitionRepository;
     private final UserRepository userRepository;
+    private final QualityRepository qualityRepository;
 
     @Override
     public List<RankingEntryResponse> getMonthlyTop(int limit){
@@ -95,5 +100,45 @@ public class RankingServiceImpl implements RankingService {
             rank++;
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public List<CategoryRankingEntryResponse> getMonthlyTopByQuality(Long qualityId, int limit) {
+        LocalDate today = LocalDate.now();
+        LocalDateTime from = today.withDayOfMonth(1).atStartOfDay();
+        LocalDateTime to = today.plusMonths(1).withDayOfMonth(1).atStartOfDay();
+
+        List<QualityStatsProjection> stats =
+                recognitionRepository.findMonthlyStatsByQuality(qualityId, from, to);
+
+
+        Quality quality = qualityRepository.findById(qualityId)
+                .orElseThrow(() -> new RuntimeException("Quality not found"));
+
+        String qualityName = quality.getName();
+
+        List<CategoryRankingEntryResponse> result = new ArrayList<>();
+        int rank = 1;
+
+        for(QualityStatsProjection row: stats){
+            if(rank > limit) break;
+
+            User user = userRepository.findById(row.getReceiverId()).orElse(null);
+            if(user == null) continue;
+
+            CategoryRankingEntryResponse entry = new CategoryRankingEntryResponse();
+            entry.setRank(rank);
+            entry.setUserId(user.getId());
+            entry.setUsername(user.getUsername());
+            entry.setDepartmentName(resolveDepartmentName(user));
+            entry.setCount(row.getQualityCount());
+            entry.setQualityName(qualityName);
+
+            result.add(entry);
+            rank++;
+        }
+
+        return result;
     }
 }

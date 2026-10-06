@@ -1,5 +1,6 @@
 package com.kind.backend.controller;
 
+import com.kind.backend.dto.response.CategoryRankingEntryResponse;
 import com.kind.backend.dto.response.RankingEntryResponse;
 import com.kind.backend.service.RankingService;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,13 @@ public class RankingController {
             @RequestParam(defaultValue = "10") int limit
     ) {
         return rankingService.getMonthlyTop(limit);
+    }
+
+    @GetMapping("/by-quality")
+    public List<CategoryRankingEntryResponse> byQuality(
+            @RequestParam Long qualityId,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        return rankingService.getMonthlyTopByQuality(qualityId, limit);
     }
 }
