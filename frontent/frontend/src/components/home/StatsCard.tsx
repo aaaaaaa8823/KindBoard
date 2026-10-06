@@ -2,8 +2,8 @@ import "./StatsCard.css"
 
 type Props = {
   giveablePoints: number;
-  receivedThisMonth?: number;
-  ranking?: number | null;
+  receivedThisMonth: number;
+  ranking: number | null;
 };
 
 export default function StatsCard({

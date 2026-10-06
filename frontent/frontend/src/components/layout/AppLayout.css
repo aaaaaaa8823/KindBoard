@@ -15,4 +15,5 @@
   min-width: 0;
   background: #fff6e3;
   padding: 24px;
+  overflow-y: auto;
 }

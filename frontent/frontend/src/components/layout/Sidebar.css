@@ -1,9 +1,15 @@
 .sidebar {
   width: 220px;
-  min-height: 100vh;
+  flex-shrink: 0;
+  position: sticky;
+  top: 64px;                 
+  align-self: flex-start;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
   background: #fff;
   border-right: 1px solid #e1e1e1;
   padding: 24px 16px;
+  box-sizing: border-box;
 }
 
 .nav-item {

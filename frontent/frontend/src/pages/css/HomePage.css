@@ -32,10 +32,8 @@
 
 .composer-row {
   display: flex;
-  align-items: center;
+  align-items: center; 
   gap: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
 }
 
 .composer-input {
@@ -73,6 +71,7 @@
   color: #249d8f;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   justify-content: center;
   font-weight: 600;
 }

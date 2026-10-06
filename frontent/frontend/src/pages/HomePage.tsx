@@ -33,6 +33,8 @@ export default function HomePage() {
   const [posts, setPosts] = useState<RecognitionDto[]>([]);
   const [composerText, setComposerText] = useState("");
   const [modalMessage, setModalMessage] = useState("");
+  const [received, setReceived] = useState(0);
+  const [ranking, setRanking] = useState<number | null>(null);
 
   useEffect(() => {
     const me = getCurrentUserId();
@@ -40,6 +42,8 @@ export default function HomePage() {
   Promise.all([fetchMyBalance(), fetchUsers(), fetchRecognition()])
     .then(([balance, users, recognitions]) => {
       setGiveable(balance.giveablePoints);
+      setReceived(balance.receivedThisMonth ?? 0); 
+      setRanking(balance.ranking ?? null);
       setColleagues(users.filter((u) => u.id !== me));
 
       const sorted = [...recognitions].sort(
@@ -118,7 +122,7 @@ const user = useMemo(() => getStoreUser(), []);
       </div>
 
       <aside className="home-aside">
-        <StatsCard giveablePoints={giveable} receivedThisMonth={0} ranking={null} />
+        <StatsCard giveablePoints={giveable} receivedThisMonth={received} ranking={ranking} />
         <ColleaguesCard colleagues={colleagues} onRecognize={handleRecognize} />
       </aside>
 
@@ -150,9 +154,9 @@ const user = useMemo(() => getStoreUser(), []);
     fetchRecognition(),
   ]);
 
-  setGiveable(b.giveablePoints);
-  setComposerText("");
-  setModalMessage("");
+setGiveable(b.giveablePoints);
+setReceived(b.receivedThisMonth ?? 0);
+setRanking(b.ranking ?? null);;
 
   setPosts(
     [...recognitions].sort(
