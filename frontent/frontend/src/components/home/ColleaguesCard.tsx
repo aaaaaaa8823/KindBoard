@@ -19,7 +19,7 @@ export default function ColleaguesCard({ colleagues, onRecognize }: Props) {
               </div>
               <div>
                 <div className="colleague-name">{u.username}</div>
-                <div className="colleague-dept">Colleague</div>
+                <div className="colleague-dept">{u.departmentName ?? "Colleague"}</div>
               </div>
             </div>
             <button

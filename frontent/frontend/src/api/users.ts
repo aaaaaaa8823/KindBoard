@@ -4,7 +4,9 @@ export type UserDto = {
     id: number;
     username: string;
     email: string;
-    // department: string;
+    role?: string;
+    active?: boolean;
+    departmentName?: string | null;
 }
 
 export function fetchUsers(): Promise<UserDto[]> {

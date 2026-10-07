@@ -80,6 +80,13 @@ public class UserServiceImpl implements UserService {
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
         dto.setActive(user.isActive());
+
+        if (user.getDepartment() != null) {
+            dto.setDepartmentName(user.getDepartment().getName());
+        } else {
+            dto.setDepartmentName(null);
+        }
+
         return dto;
     }
 

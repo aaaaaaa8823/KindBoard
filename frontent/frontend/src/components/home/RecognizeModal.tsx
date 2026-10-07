@@ -101,7 +101,7 @@ export default function RecognizeModal({
               </span>
               <span>
                 <span className="receiver-name">{u.username}</span>
-                <span className="receiver-dept">Colleague</span>
+                <span className="receiver-dept">{u.departmentName ?? "Colleague"}</span>
               </span>
             </button>
           ))}
