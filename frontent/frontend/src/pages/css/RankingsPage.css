@@ -1,0 +1,14 @@
+.rankings-page {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.rankings-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.rankings-aside {
+  flex-shrink: 0;
+}
