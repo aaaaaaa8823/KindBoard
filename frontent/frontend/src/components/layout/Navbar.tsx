@@ -1,25 +1,35 @@
-import{useMemo} from "react";
+import { useEffect, useState } from "react";
 import "./Havbar.css";
 
 type StoreUser = {
     id: number;
     username: string;
     email: string;
-    role: string;
 };
 
-function getStoreUser(): StoreUser | null {
+function readUser(): StoreUser | null {
+  try {
     const raw = localStorage.getItem("user");
-    if(!raw) return null;
-    try{
-        return JSON.parse(raw) as StoreUser;
-    } catch {
-        return null;
-    }
+    if (!raw) return null;
+    return JSON.parse(raw) as StoreUser;
+  } catch {
+    return null;
+  }
 }
 
 export default function Navbar(){
-    const user = useMemo(() => getStoreUser(), []);
+    const [user, setUser] = useState<StoreUser | null>(() => readUser());
+
+  useEffect(() => {
+    const sync = () => setUser(readUser());
+
+    window.addEventListener("user-updated", sync);
+
+    return () => {
+      window.removeEventListener("user-updated", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
 
     const name = user?.username ?? "user";
     const email = user?.email ?? "";

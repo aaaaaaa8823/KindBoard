@@ -9,10 +9,18 @@ export type UserDto = {
     departmentName?: string | null;
 }
 
-export type UpdateUserPayload = {
-  username: string;
-  email: string;
-}
+export type UpdateProfileResponse = {
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    role?: string;
+    active?: boolean;
+    departmentName?: string | null;
+  };
+  token: string;
+  type: string;
+};
 
 
 export function fetchUsers(): Promise<UserDto[]> {
@@ -42,8 +50,11 @@ export async function changePassword(data:{
   }
 }
 
-export async function updateUser(id: number, data: UpdateUserPayload){
-  return authFetch(`/users/${id}`, {
+export function updateProfile(data: {
+  username: string;
+  email: string;
+}): Promise<UpdateProfileResponse> {
+  return authFetch("/users/me", {
     method: "PUT",
     body: JSON.stringify(data),
   });

@@ -2,6 +2,7 @@ package com.kind.backend.controller;
 
 import com.kind.backend.dto.request.ChangePasswordRequest;
 import com.kind.backend.dto.request.UpdateUserRequest;
+import com.kind.backend.dto.response.UpdateProfileResponse;
 import com.kind.backend.dto.response.UserResponse;
 import com.kind.backend.dto.request.CreateUserRequest;
 import com.kind.backend.service.UserService;
@@ -47,10 +48,11 @@ public class UserController {
         userService.changePassword(request);
         return ResponseEntity.noContent().build();
     }
-
-    @PutMapping("/{id}")
-    public UserResponse update(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request){
-        return userService.update(id,request);
+    @PutMapping("/me")
+    public UpdateProfileResponse updateMe(
+            @Valid @RequestBody UpdateUserRequest request
+    ) {
+        return userService.updateProfile(request);
     }
 
     @DeleteMapping("/{id}")

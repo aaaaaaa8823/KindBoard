@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./SettingsPanel.css"; 
 import { useNavigate } from "react-router-dom";
-import { changePassword, updateUser } from "../../api/users";
+import { changePassword, updateProfile } from "../../api/users";
 type Props = {
   user: { id: number; username: string; email: string } | null;
 };
@@ -19,55 +19,34 @@ export default function SettingsPanel({ user }: Props) {
   const initial = (user?.username ?? "?").charAt(0).toUpperCase();
 
   async function handleUpdateProfile(e: React.SyntheticEvent) {
-    e.preventDefault();
-    setError(null);
-    setMessage(null);
-    
-    if(!user?.id){
-        setError("Not logged in");
-        return;
-    }
+  e.preventDefault();
+  setError(null);
+  setMessage(null);
 
-    await updateUser(user.id, {
-  username: username.trim(),
-  email: email.trim(),
-});
+  try {
+    const res = await updateProfile({
+      username: username.trim(),
+      email: email.trim(),
+    });
 
-console.log("UPDATE OK", {
-  propEmail: user.email,
-  formEmail: email,
-});
+    localStorage.setItem("token", res.token); 
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        id: res.user.id,
+        username: res.user.username,
+        email: res.user.email,
+        role: res.user.role,
+      })
+    );
+    window.dispatchEvent(new Event("user-updated"));
 
-setReloginOpen(true); // всегда, для проверки
-return;
-
-//     try {
-//         await updateUser(user.id, {
-//         username: username.trim(),
-//         email: email.trim(),
-//     });
-
-//   const emailChanged =
-//     email.trim().toLowerCase() !== (user.email ?? "").toLowerCase();
-
-//   const next = {
-//     ...user,
-//     id: user.id,
-//     username: username.trim(),
-//     email: email.trim(),
-//   };
-//   localStorage.setItem("user", JSON.stringify(next));
-//   window.dispatchEvent(new Event("user-updated"));
-
-//   if (emailChanged) {
-//     setReloginOpen(true);
-//     return;
-//   }
-
-//   setMessage("Profile updated");
-// } catch (err) {
-//   setError(err instanceof Error ? err.message : "Update failed");
-// }
+    setUsername(res.user.username);
+    setEmail(res.user.email);
+    setMessage("Profile updated");
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "Update failed");
+  }
 }
 
 function confirmRelogin() {

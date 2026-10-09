@@ -3,10 +3,12 @@ package com.kind.backend.service.impl;
 import com.kind.backend.dto.request.ChangePasswordRequest;
 import com.kind.backend.dto.request.CreateUserRequest;
 import com.kind.backend.dto.request.UpdateUserRequest;
+import com.kind.backend.dto.response.UpdateProfileResponse;
 import com.kind.backend.dto.response.UserResponse;
 import com.kind.backend.model.User;
 import com.kind.backend.repository.UserRepository;
 import com.kind.backend.service.RecognitionService;
+import com.kind.backend.security.JwtService;
 import com.kind.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +26,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public List<UserResponse> getAll() {
         return userRepository.findAll().stream()
@@ -116,4 +119,33 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    @Transactional
+    public UpdateProfileResponse updateProfile(UpdateUserRequest request) {
+        String emailFromToken = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository.findByEmail(emailFromToken)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (request.getUsername() != null && !request.getUsername().isBlank()) {
+            user.setUsername(request.getUsername().trim());
+        }
+
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            String newEmail = request.getEmail().trim();
+            if (!newEmail.equalsIgnoreCase(user.getEmail())) {
+                if (userRepository.existsByEmail(newEmail)) {
+                    throw new RuntimeException("Email already in use");
+                }
+                user.setEmail(newEmail);
+            }
+        }
+
+        userRepository.save(user);
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new UpdateProfileResponse(toResponse(user), token, "Bearer");
+    }
 }
