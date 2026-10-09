@@ -1,0 +1,114 @@
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.settings-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #249d8f;
+  background: #fff6e3;
+  color: #249d8f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.settings-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.settings-email {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+.settings-label {
+  display: block;
+  margin: 12px 0 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.settings-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid #919191;
+  border-radius: 999px;
+  font: inherit;
+  outline: none;
+}
+
+.settings-subtitle {
+  margin: 28px 0 8px;
+  font-size: 1.05rem;
+}
+
+.btn-primary {
+  margin-top: 14px;
+  background: #249d8f;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.btn-danger {
+  background: #e76f51;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.settings-form {
+  width: 100%;
+  max-width: none;
+}
+
+.relogin-backdrop {
+  position: fixed !important;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.relogin-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.relogin-modal h3 {
+  margin: 0 0 8px;
+}
+
+.relogin-modal p {
+  margin: 0 0 20px;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
