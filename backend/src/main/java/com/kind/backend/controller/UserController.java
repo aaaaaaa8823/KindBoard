@@ -1,11 +1,13 @@
 package com.kind.backend.controller;
 
+import com.kind.backend.dto.request.ChangePasswordRequest;
 import com.kind.backend.dto.request.UpdateUserRequest;
 import com.kind.backend.dto.response.UserResponse;
 import com.kind.backend.dto.request.CreateUserRequest;
 import com.kind.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
@@ -36,6 +38,14 @@ public class UserController {
     public UserResponse create(@Valid @RequestBody CreateUserRequest request){
 
         return userService.create(request);
+    }
+
+    @PostMapping("/me/password")
+    public ResponseEntity<Void> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        userService.changePassword(request);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

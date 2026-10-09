@@ -3,7 +3,6 @@ import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import RankingsPage from "./pages/RankingsPage";
 import ProfilePage from "./pages/ProfilePage";
-import SettingsPage from "./pages/SettingsPage";
 import AppLayout from "./components/layout/AppLayout";
 
 
@@ -29,7 +28,6 @@ export default function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/rankings" element={<RankingsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/settings" element={<SettingsPage />} />
         </Route>
 
         <Route path="/" element={<Navigate to="/home" replace />} />

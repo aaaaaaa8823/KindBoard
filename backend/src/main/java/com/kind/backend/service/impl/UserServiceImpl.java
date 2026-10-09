@@ -1,5 +1,6 @@
 package com.kind.backend.service.impl;
 
+import com.kind.backend.dto.request.ChangePasswordRequest;
 import com.kind.backend.dto.request.CreateUserRequest;
 import com.kind.backend.dto.request.UpdateUserRequest;
 import com.kind.backend.dto.response.UserResponse;
@@ -8,6 +9,8 @@ import com.kind.backend.repository.UserRepository;
 import com.kind.backend.service.RecognitionService;
 import com.kind.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserResponse> getAll() {
         return userRepository.findAll().stream()
@@ -88,6 +92,28 @@ public class UserServiceImpl implements UserService {
         }
 
         return dto;
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(ChangePasswordRequest request) {
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        if (request.getCurrentPassword().equals(request.getNewPassword())) {
+            throw new RuntimeException("New password must be different");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 
 }

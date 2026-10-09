@@ -16,10 +16,6 @@ export default function Sidebar(){
                 <NavLink to="/profile" className={({isActive}) => isActive ? "nav-item active": "nav-item"}>
                     Profile
                 </NavLink>
-
-                <NavLink to="/settings" className={({isActive}) => isActive ? "nav-item active": "nav-item"}>
-                    Settings
-                </NavLink>
             </nav>
         </aside>
     );
