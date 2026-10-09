@@ -9,6 +9,7 @@ export type RecognitionDto = {
   receiver_id: number;
   quality_id: number;
   giverUsername: string | null;
+  points: number;
   receiverUsername: string | null;
   qualityCode: string | null;
   qualityUsername: string | null;
