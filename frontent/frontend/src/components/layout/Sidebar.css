@@ -10,6 +10,11 @@
   border-right: 1px solid #e1e1e1;
   padding: 24px 16px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-nav {
+  flex: 1;
 }
 
 .nav-item {
@@ -32,4 +37,21 @@
   font-weight: 500;
   font-size: 18px;
   color: #249d8f;
+}
+
+.sidebar-logout {
+  margin-top: auto;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e76f51;
+  border-radius: 8px;
+  background: transparent;
+  color: #e76f51;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.sidebar-logout:hover {
+  background: #fff6e3;
 }

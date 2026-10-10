@@ -42,3 +42,9 @@ export async function register(payload: RegisterPayload): Promise<AuthResponse> 
 
   return res.json();
 }
+
+export function logout(){
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  window.dispatchEvent(new Event("user-updated"));
+}

@@ -1,7 +1,15 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
+import { logout } from "../../api/auth";
 
 export default function Sidebar(){
+    const navigate = useNavigate();
+
+function handleLogout(){
+    logout();
+    navigate("/login");
+}
+
     return(
         <aside className="sidebar">
             <nav className="sidebar-nav">
@@ -17,6 +25,8 @@ export default function Sidebar(){
                     Profile
                 </NavLink>
             </nav>
+
+            <button type="button" className="sidebar-logout" onClick={handleLogout}> Log out </button>
         </aside>
     );
 }
